@@ -56,6 +56,17 @@ describe('boneRouter: ', () => {
         });
     });
     describe('GET:id', () => {
+        it('gets an object by its id', () => {
+            return request.post('/api/bones')
+                .send(sphenoidInput)
+                .then(res => {
+                    res = res.body;
+                    return request.get(`/api/bones/${res._id}`)
+                        .then(gotten => {
+                            assert.deepEqual(gotten.body, res);
+                        });
+                });
+        });
 
     });
     describe('POST', () => {
