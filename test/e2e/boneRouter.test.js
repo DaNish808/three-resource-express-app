@@ -67,7 +67,19 @@ describe('boneRouter: ', () => {
                         });
                 });
         });
+        
+        it('returns 404 if id does not exist', () => {
+            return request.post('/api/bones')
+                .send(sphenoidInput)
+                .then(res => {
+                    res = res.body;
+                    return request.get(`/api/bones/++badId++`)
+                        .catch(err => {
+                            assert.equal(err.status, 404);
+                        });
+                });
 
+        });
     });
     describe('POST', () => {
         it('returns the posted object with its mongodb _id', () => {
