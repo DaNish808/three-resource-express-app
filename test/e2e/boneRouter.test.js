@@ -114,6 +114,11 @@ describe('boneRouter: ', () => {
                         });
                 });
         });
+
+        it('returns {removed false} when given a bad id', () => {
+            return request.del('/api/bones/<+++blah+++>')
+                .then(status => assert.deepEqual(status.body, {removed: false}));
+        });
     });
     describe('PUT:id', () => {
 
