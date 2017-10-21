@@ -1,5 +1,6 @@
 const db = require('./db');
 const request = require('./request');
+const mongoose = require('mongoose');
 const {assert} = require('chai');
 const Bone = require('../../lib/models/Bone');
 
@@ -9,6 +10,8 @@ describe('boneRouter: ', () => {
     let calcanealInput = null;
     let sphenoidInput = null;
     beforeEach(() => {
+        mongoose.connection.dropDatabase();
+
         humerusInput = {
             name: 'humerus',
             type: 'long',
@@ -33,7 +36,24 @@ describe('boneRouter: ', () => {
     });
 
     describe('GET', () => {
-
+        it('returns all items in the database as an array', () => {
+            const saveAll = [
+                request.post('/api/bones').send(humerusInput),
+                request.post('/api/bones').send(calcanealInput),
+                request.post('/api/bones').send(sphenoidInput)
+            ];
+            return Promise.all(saveAll)
+                .then(savedData => {
+                    savedData = savedData.map(res => res.body);
+                    return request.get('/api/bones')
+                        .then(gottenData => {
+                            const gotten = gottenData.body;
+                            assert.deepInclude(gotten, savedData[0]);
+                            assert.deepInclude(gotten, savedData[1]);
+                            assert.deepInclude(gotten, savedData[2]);
+                        });
+                });
+        });
     });
     describe('GET:id', () => {
 
