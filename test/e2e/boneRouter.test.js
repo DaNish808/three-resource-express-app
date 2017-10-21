@@ -71,7 +71,9 @@ describe('boneRouter: ', () => {
             delete humerusInput.name;
             return request.post('/api/bones')
                 .send(humerusInput)
-                .catch(err => assert.equal(err.response.body.name.kind, 'required'));
+                .catch(err => {
+                    assert.equal(err.response.body.error[0], 'Path `name` is required.');
+                });
         });
     });
     describe('DELETE:id', () => {
