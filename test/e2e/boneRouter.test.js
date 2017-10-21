@@ -100,7 +100,21 @@ describe('boneRouter: ', () => {
         });
     });
     describe('DELETE:id', () => {
-
+        it('removes the object with the given id', () => {
+            return request.post('/api/bones')
+                .send(calcanealInput)
+                .then(saved => {
+                    saved = saved.body;
+                    return request.del(`/api/bones/${saved._id}`)
+                        .then(status => {
+                            assert.equal(status, {removed: true});
+                            return request.get(`/api/bones/${saved._id}`)
+                                .catch(err => {
+                                    assert.equal(err.status, 404);
+                                });
+                        });
+                });
+        });
     });
     describe('PUT:id', () => {
 
