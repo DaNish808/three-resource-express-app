@@ -123,14 +123,14 @@ describe('boneRouter: ', () => {
     describe('PUT:id', () => {
         it('updates the bone with the given id', () => {
             return request.post('/api/bones')
-                .send(sphenoid)
+                .send(sphenoidInput)
                 .then(saved => {
                     saved = saved.body;
-                    sphenoid.name = 'da best, yo';
+                    sphenoidInput.name = saved.name = 'da best, yo';
                     return request.put(`/api/bones/${saved._id}`)
-                        .send(sphenoid)
+                        .send(sphenoidInput)
                         .then(updated => {
-                            assert.deepEqual(updated.body, sphenoid);
+                            assert.deepEqual(updated.body, saved);
                         });
                 })
         });
