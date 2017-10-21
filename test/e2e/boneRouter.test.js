@@ -71,9 +71,8 @@ describe('boneRouter: ', () => {
         it('returns 404 if id does not exist', () => {
             return request.post('/api/bones')
                 .send(sphenoidInput)
-                .then(res => {
-                    res = res.body;
-                    return request.get(`/api/bones/++badId++`)
+                .then(() => {
+                    return request.get('/api/bones/++badId++')
                         .catch(err => {
                             assert.equal(err.status, 404);
                         });
@@ -107,7 +106,7 @@ describe('boneRouter: ', () => {
                     saved = saved.body;
                     return request.del(`/api/bones/${saved._id}`)
                         .then(status => {
-                            assert.equal(status, {removed: true});
+                            assert.deepEqual(status.body, {removed: true});
                             return request.get(`/api/bones/${saved._id}`)
                                 .catch(err => {
                                     assert.equal(err.status, 404);
